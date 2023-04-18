@@ -8,6 +8,7 @@ const Home = () => {
 
 	const [state, setState] = useState([]);
 	const [load, setLoad] = useState(false);
+	const [newTask, setNewTask] = useState("");
 
 	
 
@@ -28,10 +29,10 @@ const Home = () => {
 		getData()
 	},[]);
 
-	const addNewTodo = async () => {
+	const addNewTask = async () => {
 		try {
 			setLoad(true)
-			const body = [...state, { label: "newTodo", done: false }]
+			const body = [...state, { label: newTask, done: false }]
 			const response = await fetch(URL, { method: "PUT", body: JSON.stringify(body), headers: HEADERS });
 			console.log(response);
 			await getData();
@@ -43,9 +44,7 @@ const Home = () => {
 
 	const deleteTodo = async (indice) => {
 		try {
-
 			const newState = state.filter ((elem, index) => {return indice !== index})
-
 			setLoad(true)
 			const response = await fetch(URL, { method: "PUT", body: JSON.stringify(newState), headers: HEADERS });
 			console.log(response);
@@ -57,13 +56,11 @@ const Home = () => {
 	}
 
 
-
-
 	return (
 		<div className="text-center">
-			{load ? <div>Loading...</div> : state.map((todo)=> <div key={todo.label}> {todo.label} <button onClick={deleteTodo}>delete</button></div> )}
-			<button onClick={addNewTodo}>Add task</button>
-			
+			{load ? <div>Loading...</div> : state.map((task)=> <div key={task.label}> {task.label} <button onClick={deleteTodo}>delete</button></div> )}
+			<button onClick={addNewTask}>Add task</button>
+			<input className="input" onChange={(e) => setNewTask(e.target.value)} type="text" placeholder="write down your task" />
 		</div>
 	);
 };
