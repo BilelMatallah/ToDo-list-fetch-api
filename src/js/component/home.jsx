@@ -42,9 +42,9 @@ const Home = () => {
 		}
 	}
 
-	const deleteTodo = async (indice) => {
+	const deleteTodo = async () => {
 		try {
-			const newState = state.filter ((elem, index) => {return indice !== index})
+			const newState = state.filter ((elem, index) => {return elem.index !== index})
 			setLoad(true)
 			const response = await fetch(URL, { method: "PUT", body: JSON.stringify(newState), headers: HEADERS });
 			console.log(response);
@@ -55,12 +55,11 @@ const Home = () => {
 		}
 	}
 
-
 	return (
 		<div className="text-center">
 			{load ? <div>Loading...</div> : state.map((task)=> <div key={task.label}> {task.label} <button onClick={deleteTodo}>delete</button></div> )}
-			<button onClick={addNewTask}>Add task</button>
 			<input className="input" onChange={(e) => setNewTask(e.target.value)} type="text" placeholder="write down your task" />
+			<button onClick={addNewTask}>Add task</button>
 		</div>
 	);
 };
