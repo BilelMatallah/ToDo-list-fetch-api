@@ -40,9 +40,11 @@ const Home = () => {
 		}
 	}
 
-	const deleteTodo = async () => {
+// "sacar el perro" = "tarea" 
+
+	const deleteTodo = async (tarea) => {
 		try {
-			const newState = state.filter ((elem, index) => {return elem.index !== index})
+			const newState = list.filter ((elem) => elem.label != tarea)
 			setLoad(true)
 			const response = await fetch(URL, { method: "PUT", body: JSON.stringify(newState), headers: HEADERS });
 			console.log(response);
@@ -55,7 +57,7 @@ const Home = () => {
 
 	return (
 		<div className="text-center">
-			{load ? <div>Loading...</div> : list.map((task)=> <div key={task.label}> {task.label} <button onClick={deleteTodo}>delete</button></div> )}
+			{load ? <div>Loading...</div> : list.map((task)=> <div key={task.label}> {task.label} <button onClick={ () => {deleteTodo(task.label)} }>delete</button></div> )}
 			<input className="input" onChange={(e) => setNewTask(e.target.value)} type="text" placeholder="write down your task" />
 			<button onClick={addNewTask}>Add task</button>
 		</div>
