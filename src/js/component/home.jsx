@@ -6,18 +6,16 @@ const URL = "https://assets.breatheco.de/apis/fake/todos/user/bill"
 //create your first component
 const Home = () => {
 
-	const [state, setState] = useState([]);
+	const [list, setList] = useState([]);
 	const [load, setLoad] = useState(false);
 	const [newTask, setNewTask] = useState("");
-
-	
 
 	const getData = async () => {
 		try {
 			setLoad(true)
 			const response = await fetch (URL, {method: "GET"});
 			const data = await response.json();
-			setState(data);
+			setList(data);
 			setLoad(false);
 		}catch(err){
 			console.log("error", err)
@@ -32,7 +30,7 @@ const Home = () => {
 	const addNewTask = async () => {
 		try {
 			setLoad(true)
-			const body = [...state, { label: newTask, done: false }]
+			const body = [...list, { label: newTask, done: false }]
 			const response = await fetch(URL, { method: "PUT", body: JSON.stringify(body), headers: HEADERS });
 			console.log(response);
 			await getData();
@@ -57,7 +55,7 @@ const Home = () => {
 
 	return (
 		<div className="text-center">
-			{load ? <div>Loading...</div> : state.map((task)=> <div key={task.label}> {task.label} <button onClick={deleteTodo}>delete</button></div> )}
+			{load ? <div>Loading...</div> : list.map((task)=> <div key={task.label}> {task.label} <button onClick={deleteTodo}>delete</button></div> )}
 			<input className="input" onChange={(e) => setNewTask(e.target.value)} type="text" placeholder="write down your task" />
 			<button onClick={addNewTask}>Add task</button>
 		</div>
